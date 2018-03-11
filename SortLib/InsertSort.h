@@ -20,7 +20,7 @@ public:
 
 private:
 	int SortVArray(vector<T> *inVArray);
-	int SortCArray(T **inCArray);
+	int SortCArray(T *inCArray);
 	int SortMArray(Array<T> *inMArray);
 };
 
@@ -40,22 +40,17 @@ inline InsertSort<T>::~InsertSort()
 {}
 
 template<typename T>
-inline int InsertSort<T>::SortVArray(vector<T> *inVArray)
+inline int InsertSort<T>::SortVArray(vector<T>* inVArray)
 {
 	int startTime = GetTickCount();
 	int vSize = inVArray->size();
-	int i, j;
 	T key;
 
-	for (i = 1; i < vSize; i++)
-	{
+	for (int i = 1; i < vSize; i++)	{
 		key = (*inVArray)[i];
-		j = i - 1;
-
-		while (j >= 0 && (*inVArray)[j] > key)
-		{
+		int j;
+		for (j = i - 1; j >= 0 && (*inVArray)[j] > key; j--) {
 			(*inVArray)[j + 1] = (*inVArray)[j];
-			j = j - 1;
 		}
 		(*inVArray)[j + 1] = key;
 	}
@@ -63,41 +58,35 @@ inline int InsertSort<T>::SortVArray(vector<T> *inVArray)
 }
 
 template<typename T>
-inline int InsertSort<T>::SortCArray(T** inCArray)
+inline int InsertSort<T>::SortCArray(T* inCArray)
 {
 	int startTime = GetTickCount();
 	int cSize = sizeof(inCArray);
-	int i, j;
 	T key;
 
-	for (i = 1; i < cSize; i++)	{
-		key = (*inCArray)[i];
-		j = i - 1;
-
-		while (j >= 0 && (*inCArray)[j] > key) {
-			(*inCArray)[j + 1] = (*inCArray)[j];
-			j = j - 1;
+	for (int i = 1; i < cSize; i++) {
+		key = inCArray[i];
+		int j;
+		for (j = i - 1; j >= 0 && inCArray[j] > key; j--) {
+			inCArray[j + 1] = inCArray[j];
 		}
-		(*inCArray)[j + 1] = key;
+		inCArray[j + 1] = key;
 	}
 	return (GetTickCount() - startTime);
 }
 
 template<typename T>
-inline int InsertSort<T>::SortMArray(Array<T> *inMArray)
+inline int InsertSort<T>::SortMArray(Array<T>* inMArray)
 {
 	int startTime = GetTickCount();
 	int mSize = inMArray->getLength();
 	T key;
-	int i, j;
 
-	for (i = 1; i < mSize; i++) {
+	for (int i = 1; i < mSize; i++) {
 		key = (*inMArray)[i];
-		j = i - 1;
-
-		while (j >= 0 && (*inMArray)[j] > key)	 {
+		int j;
+		for (j = i - 1; j >= 0 && (*inMArray)[j] > key; j--) {
 			(*inMArray)[j + 1] = (*inMArray)[j];
-			j = j - 1;
 		}
 		(*inMArray)[j + 1] = key;
 	}

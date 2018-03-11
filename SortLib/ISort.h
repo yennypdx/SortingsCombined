@@ -23,20 +23,21 @@ protected:
 	void displayHeader(string inHeader);
 	void displayAllArrays();
 	void displayArrays(vector<T> *inVArray);
-	void displayArrays(T** inCArray);
+	void displayArrays(T* inCArray);
 	void displayArrays(Array<T> *inMArray);
 	void init(vector<T> *inValues, int inNum, string inName);
 protected:
 	virtual int SortVArray(vector<T> *inVArray) = 0;
-	virtual int SortCArray(T** inCArray) = 0;
+	virtual int SortCArray(T* inCArray) = 0;
 	virtual int SortMArray(Array<T> *inMArray) = 0;
 protected:
 	int aSize;
-	T** cArray;
 	string mName = "default";
-	vector<T> oArray;
-	vector<T> vArray;
-	Array<T> mArray;
+protected:
+	T * c_Array;
+	vector<T> orig_CopyArray;
+	vector<T> vec_Array;
+	Array<T> my_Array;
 };
 
 template <typename T>
@@ -46,9 +47,9 @@ inline SortResult ISort<T>::Sort()
 	SortResult tempResults = SortResult();
 
 	tempResults.setName(mName);
-	tempResults.setVArrayTime(SortVArray(&vArray));
-	tempResults.setCArrayTime(SortCArray(cArray));
-	tempResults.setMArrayTime(SortMArray(&mArray));
+	tempResults.setCArrayTime(SortCArray(& (*c_Array)));
+	tempResults.setVArrayTime(SortVArray(&vec_Array));
+	tempResults.setMArrayTime(SortMArray(&my_Array));
 
 	return tempResults;
 }
@@ -56,37 +57,35 @@ inline SortResult ISort<T>::Sort()
 template <typename T>
 inline ISort<T>::~ISort()
 {
-	vector<T>().swap(oArray);
-	vector<T>().swap(vArray);
-	delete[](*cArray);
-	delete cArray;
-	cArray = NULL;
-	mArray = NULL;
+	vector<T>().swap(orig_CopyArray);
+	vector<T>().swap(vec_Array);
+	delete c_Array;
+	c_Array = nullptr;
 }
 
 template <typename T>
 inline void ISort<T>::revertArrays()
 {
 	for (int i = 0; i < (aSize - 1); i++) {
-		vArray[i] = oArray[i];
-		(*cArray)[i] = oArray[i];
-		mArray[i] = oArray[i];
+		c_Array[i] = orig_CopyArray[i];
+		vec_Array[i] = orig_CopyArray[i];
+		my_Array[i] = orig_CopyArray[i];
 	}
 }
 
 template <typename T>
 inline void ISort<T>::init(vector<T>* inValues, int inNum, string inName)
 {
-	cArray = new T*;
-	(*cArray) = new T[inNum];
-	mArray = Array<T>(inNum);
+	c_Array = new T[inNum];
+	my_Array = Array<T>(inNum);
 	mName = inName;
 
 	for (int i = 0; i < inNum; i++) {
-		vArray.push_back((*inValues)[i]);
-		oArray.push_back((*inValues)[i]);
-		(*cArray)[i] = (*inValues)[i];
-		mArray[i] = (*inValues)[i];
+		orig_CopyArray.push_back((*inValues)[i]);
+
+		c_Array[i] = (*inValues)[i];
+		vec_Array.push_back((*inValues)[i]);
+		my_Array[i] = (*inValues)[i];
 	}
 }
 
@@ -117,7 +116,7 @@ inline void ISort<T>::displayArrays(vector<T>* inVArray)
 }
 
 template <typename T>
-inline void ISort<T>::displayArrays(T** inCArray)
+inline void ISort<T>::displayArrays(T* inCArray)
 {
 	for (int i = 0; i < aSize; i++)
 	{

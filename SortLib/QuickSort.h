@@ -23,12 +23,12 @@ private:
 	void quickSortReq(vector<T> *inVArray, int low, int high);
 	int partition(vector<T> *inVArray, int low, int high);
 private:
-	int SortCArray(T **inCArray);
-	void quickSortReq(T **inCArray, int low, int high);
-	int partition(T **inCArray, int low, int high);
+	int SortCArray(T *inCArray);
+	void quickSortReq(T *inCArray, int low, int high);
+	int partition(T *inCArray, int low, int high);
 private:
 	int SortMArray(Array<T> *inMArray);
-	void quickSortReq(Array<T> *inMArray, int low, int high);
+	void quickSortReq(Array<T> *inMArray, int left, int right);
 	int partition(Array<T> *inMArray, int low, int high);
 };
 
@@ -59,34 +59,44 @@ inline int QuickSort<T>::SortVArray(vector<T> *inVArray)
 }
 
 template<typename T>
-inline void QuickSort<T>::quickSortReq(vector<T> *inVArray, int low, int high)
+inline void QuickSort<T>::quickSortReq(vector<T> *inVArray, int left, int right)
 {
-	if (low < high) {
-		int pi = partition(inVArray, low, high);
+	if (left < right) {
+		int pi = partition(inVArray, left, right);
 
-		quickSortReq(inVArray, low, pi - 1);
-		quickSortReq(inVArray, pi + 1, high);
+		quickSortReq(inVArray, left, pi - 1);
+		quickSortReq(inVArray, pi + 1, right);
 	}
 }
 
 template<typename T>
-inline int QuickSort<T>::partition(vector<T> *inVArray, int low, int high)
+inline int QuickSort<T>::partition(vector<T> *inVArray, int left, int right)
 {
-	T pivot = (*inVArray)[high];
-	int i = (low - 1);
+	T pivot = (*inVArray)[left];
+	int l = left + 1;
+	int r = right;
 
-	for (int j = low; j <= high - 1; j++) {
-		if ((*inVArray)[j] <= pivot) {
-			i++;
-			swap((*inVArray)[i], (*inVArray)[j]);
+	while (l < r) {
+		while (l < right && (*inVArray)[l] < pivot) {
+			l++;
+		}
+		while (r > left && (*inVArray)[r] >= pivot) {
+			r--;
+		}
+			
+		if (l < r) {
+			int temp = (*inVArray)[l];
+			(*inVArray)[l] = (*inVArray)[r];
+			(*inVArray)[r] = temp;
 		}
 	}
-	swap((*inVArray)[i + 1], (*inVArray)[high]);
-	return (i + 1);
+	(*inVArray)[left] = (*inVArray)[r];
+	(*inVArray)[r] = pivot;
+	return r;
 }
 
 template<typename T>
-inline int QuickSort<T>::SortCArray(T** inCArray)
+inline int QuickSort<T>::SortCArray(T * inCArray)
 {
 	int startTime = GetTickCount();
 	int cSize = sizeof(inCArray);
@@ -97,30 +107,35 @@ inline int QuickSort<T>::SortCArray(T** inCArray)
 }
 
 template<typename T>
-inline void QuickSort<T>::quickSortReq(T **inCArray, int low, int high)
+inline void QuickSort<T>::quickSortReq(T * inCArray, int left, int right)
 {
-	if (low < high) {
-		int pi = partition(inCArray, low, high);
+	if (left < right) {
+		int pi = partition(inCArray, left, right);
 
-		quickSortReq(inCArray, low, pi - 1);
-		quickSortReq(inCArray, pi + 1, high);
+		quickSortReq(inCArray, left, pi - 1);
+		quickSortReq(inCArray, pi + 1, right);
 	}
 }
 
 template<typename T>
-inline int QuickSort<T>::partition(T **inCArray, int low, int high)
+inline int QuickSort<T>::partition(T * inCArray, int left, int right)
 {
-	T pivot = (*inCArray)[high];
-	int i = (low - 1);
+	T pivot = inCArray[left];
+	int l = left + 1;
+	int r = right;
 
-	for (int j = low; j <= high - 1; j++) {
-		if ((*inCArray)[j] <= pivot) {
-			i++;
-			swap((*inCArray)[i], (*inCArray)[j]);
+	while (l < r) {
+		while (l < right && inCArray[l] < pivot) l++;
+		while (r > left && inCArray[r] >= pivot) r--;
+		if (l < r) {
+			int temp = inCArray[l];
+			inCArray[l] = inCArray[r];
+			inCArray[r] = temp;
 		}
 	}
-	swap((*inCArray)[i + 1], (*inCArray)[high]);
-	return (i + 1);
+	inCArray[left] = inCArray[r];
+	inCArray[r] = pivot;
+	return r;
 }
 
 template<typename T>
@@ -135,30 +150,35 @@ inline int QuickSort<T>::SortMArray(Array<T> *inMArray)
 }
 
 template<typename T>
-inline void QuickSort<T>::quickSortReq(Array<T> *inMArray, int low, int high)
+inline void QuickSort<T>::quickSortReq(Array<T> *inMArray, int left, int right)
 {
-	if (low < high) {
-		int pi = partition(inMArray, low, high);
+	if (left < right) {
+		int pi = partition(inMArray, left, right);
 
-		quickSortReq(inMArray, low, pi - 1);
-		quickSortReq(inMArray, pi + 1, high);
+		quickSortReq(inMArray, left, pi - 1);
+		quickSortReq(inMArray, pi + 1, right);
 	}
 }
 
 template<typename T>
-inline int QuickSort<T>::partition(Array<T> *inMArray, int low, int high)
+inline int QuickSort<T>::partition(Array<T> *inMArray, int left, int right)
 {
-	T pivot = (*inMArray)[high];
-	int i = (low - 1);
+	T pivot = (*inMArray)[left];
+	int l = left + 1;
+	int r = right;
 
-	for (int j = low; j <= high - 1; j++) {
-		if ((*inMArray)[j] <= pivot)	{
-			i++;
-			swap((*inMArray)[i], (*inMArray)[j]);
+	while (l < r) {
+		while (l < right && (*inMArray)[l] < pivot) l++;
+		while (r > left && (*inMArray)[r] >= pivot) r--;
+		if (l < r) {
+			int temp = (*inMArray)[l];
+			(*inMArray)[l] = (*inMArray)[r];
+			(*inMArray)[r] = temp;
 		}
 	}
-	swap((*inMArray)[i + 1], (*inMArray)[high]);
-	return (i + 1);
+	(*inMArray)[left] = (*inMArray)[r];
+	(*inMArray)[r] = pivot;
+	return r;
 }
 
 #endif

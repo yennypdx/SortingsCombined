@@ -15,17 +15,17 @@ template<class T>
 class SelectSort : public ISort<T>
 {
 public:
-	SelectSort(vector<T> *inValues, int inNum);;
+	SelectSort(vector<T> * inValues, int inNum);;
 	~SelectSort();
 
 private:
 	int SortVArray(vector<T> *inVArray);
-	int SortCArray(T** inCArray);
+	int SortCArray(T * inCArray);
 	int SortMArray(Array<T> *inMArray);
 };
 
 template<typename T>
-inline SelectSort<T>::SelectSort(vector<T> *inValues, int inSize)
+inline SelectSort<T>::SelectSort(vector<T> * inValues, int inSize)
 {
 	if (inSize > 0) {
 		ISort<T>::init(inValues, inSize, "SELECTSORT");
@@ -40,16 +40,16 @@ inline SelectSort<T>::~SelectSort()
 {}
 
 template<typename T>
-inline int SelectSort<T>::SortVArray(vector<T> *inVArray)
+inline int SelectSort<T>::SortVArray(vector<T> * inVArray)
 {
 	int startTime = GetTickCount();
 	int i, j, min_idx;
 	int vSize = inVArray->size();
 
-	for (i = 0; i < (vSize - 1); i++) {
+	for (i = vSize - 1; i >= 1; i--) {
 		min_idx = i;
-		for (j = i + 1; j < vSize; j++) {
-			if ((*inVArray)[j] < (*inVArray)[min_idx]) {
+		for (j = 0; j < i; j++) {
+			if ((*inVArray)[j] > (*inVArray)[min_idx]) {
 				min_idx = j;
 			}
 		}
@@ -59,34 +59,34 @@ inline int SelectSort<T>::SortVArray(vector<T> *inVArray)
 }
 
 template<typename T>
-inline int SelectSort<T>::SortCArray(T** inCArray)
+inline int SelectSort<T>::SortCArray(T * inCArray)
 {
 	int startTime = GetTickCount();
 	int i, j, min_idx;
 	int cSize = sizeof(inCArray);
 
-	for (i = 0; i < (cSize - 1); i++) {
+	for (i = cSize - 1; i >= 1; i--) {
 		min_idx = i;
-		for (j = i + 1; j < cSize; j++) {
-			if ((*inCArray)[j] < (*inCArray)[min_idx]) {
+		for (j = 0; j < i; j++) {
+			if (inCArray[j] < inCArray[min_idx]) {
 				min_idx = j;
 			}
 		}
-		swap((*inCArray)[min_idx], (*inCArray)[i]);
+		swap(inCArray[min_idx], inCArray[i]);
 	}
 	return (GetTickCount() - startTime);
 }
 
 template<typename T>
-inline int SelectSort<T>::SortMArray(Array<T> *inMArray)
+inline int SelectSort<T>::SortMArray(Array<T> * inMArray)
 {
 	int startTime = GetTickCount();
 	int i, j, min_idx;
 	int mSize = inMArray->getLength();
 
-	for (i = 0; i < (mSize - 1); i++) {
+	for (i = mSize - 1; i >= 1; i--) {
 		min_idx = i;
-		for (j = i + 1; j < mSize; j++) {
+		for (j = 0; j < i; j++) {
 			if ((*inMArray)[j] < (*inMArray)[min_idx]) {
 				min_idx = j;
 			}

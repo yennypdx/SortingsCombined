@@ -22,8 +22,8 @@ private:
 	int SortVArray(vector<T> *inVArray);
 	void heapify(vector<T> *inVArray, int num1, int num2);
 private:
-	int SortCArray(T** inCArray);
-	void heapify(T** inCArray, int num1, int num2);
+	int SortCArray(T* inCArray);
+	void heapify(T* inCArray, int num1, int num2);
 private:
 	int SortMArray(Array<T> *inMArray);
 	void heapify(Array<T> *inMArray, int num1, int num2);
@@ -83,7 +83,7 @@ inline void HeapSort<T>::heapify(vector<T> *inVArray, int num1, int num2)
 }
 
 template<typename T>
-inline int HeapSort<T>::SortCArray(T **inCArray)
+inline int HeapSort<T>::SortCArray(T* inCArray)
 {
 	int startTime = GetTickCount();
 	int cSize = sizeof(inCArray);
@@ -93,29 +93,29 @@ inline int HeapSort<T>::SortCArray(T **inCArray)
 	}
 
 	for (int i = (cSize - 1); i >= 0; i--) {
-		swap((*inCArray)[0], (*inCArray)[i]);
+		swap(inCArray[0], inCArray[i]);
 		heapify(inCArray, i, 0);
 	}
 	return (GetTickCount() - startTime);
 }
 
 template<typename T>
-inline void HeapSort<T>::heapify(T **inCArray, int num1, int num2)
+inline void HeapSort<T>::heapify(T* inCArray, int num1, int num2)
 {
 	int largest = num2;
 	int left = (2 * num2) + 1;
 	int right = (2 * num2) + 2;
 
-	if ((left < num1) && ((*inCArray)[left] >(*inCArray)[largest])) {
+	if ((left < num1) && (inCArray[left] > inCArray[largest])) {
 		largest = left;
 	}
 
-	if ((right < num1) && ((*inCArray)[right] >(*inCArray)[largest])) {
+	if ((right < num1) && (inCArray[right] > inCArray[largest])) {
 		largest = right;
 	}
 
 	if (largest != num2) {
-		swap((*inCArray)[num2], (*inCArray)[largest]);
+		swap(inCArray[num2], inCArray[largest]);
 		heapify(inCArray, num1, largest);
 	}
 }

@@ -20,7 +20,7 @@ public:
 
 private:
 	int SortVArray(vector<T> *inVArray);
-	int SortCArray(T** inCArray);
+	int SortCArray(T* inCArray);
 	int SortMArray(Array<T> *inMArray);
 };
 
@@ -63,7 +63,7 @@ inline int FlaggedSort<T>::SortVArray(vector<T> *inVArray)
 }
 
 template<typename T>
-inline int FlaggedSort<T>::SortCArray(T** inCArray)
+inline int FlaggedSort<T>::SortCArray(T* inCArray)
 {
 	int startTime = GetTickCount();
 	int cSize = sizeof(inCArray);
@@ -71,10 +71,10 @@ inline int FlaggedSort<T>::SortCArray(T** inCArray)
 	for (int i = 1; i < cSize; i++) {
 		bool isSorted = true;
 		for (int j = 0; j < ((cSize - 1) - i); j++) {
-			if ((*inCArray)[j] >(*inCArray)[j + 1]) {
-				T temp = (*inCArray)[j];
-				(*inCArray)[j] = (*inCArray)[j + 1];
-				(*inCArray)[j + 1] = temp;
+			if (inCArray[j] > inCArray[j + 1]) {
+				T temp = inCArray[j];
+				inCArray[j] = inCArray[j + 1];
+				inCArray[j + 1] = temp;
 				isSorted = false;
 			}
 		}

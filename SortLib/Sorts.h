@@ -61,7 +61,9 @@ private:
 
 template<typename T>
 inline Sorts<T>::~Sorts()
-{}
+{
+	vector<T>().swap(values);
+}
 
 template<typename T>
 inline void Sorts<T>::RunSorts(int inSize)
@@ -79,15 +81,13 @@ inline void Sorts<T>::RunSorts(int inSize)
 	algorithms.push_back(new SelectSort<T>(&values, inSize));
 	algorithms.push_back(new ShellSort<T>(&values, inSize));
 
-	int alSize = algorithms.size();
-	//for (int i = 0; i < alSize; i++) {
 	int it = 0;
 	for (auto &algorithm : algorithms) {
 		results.push_back(algorithm->Sort());
 
 		cout << "SORTING TYPE : " << results[it].getName() << endl;
-		cout << "via V-Array	: " << results[it].getVArrayTime() << endl;
 		cout << "via C-Array	: " << results[it].getCArrayTime() << endl;
+		cout << "via V-Array	: " << results[it].getVArrayTime() << endl;
 		cout << "via MY-ARRAY	: " << results[it].getMArrayTime() << endl << endl;
 
 		it++;
@@ -113,14 +113,12 @@ inline void Sorts<T>::writeToFile(vector<SortResult> inResults)
 	myFile.open("sortsresult.txt");
 	int restSize = inResults.size();
 
-	for (int i = 0; i < restSize; i++)
-	{
+	for (int i = 0; i < restSize; i++) {
 		myFile << "Sorting Type: " <<  inResults[i].getName() << endl;
-		myFile << "VARRAY : " << to_string(inResults[i].getVArrayTime()) << endl;
 		myFile << "CARRAY : " << to_string(inResults[i].getCArrayTime()) << endl;
+		myFile << "VARRAY : " << to_string(inResults[i].getVArrayTime()) << endl;
 		myFile << "MYARRAY : " << to_string(inResults[i].getMArrayTime()) << endl << endl;
 	}
-
 	myFile.close();
 }
 

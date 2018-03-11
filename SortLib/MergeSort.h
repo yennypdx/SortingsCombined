@@ -20,15 +20,15 @@ public:
 
 private:
 	int SortVArray(vector<T> *inVArray);
-	void mergeSortRec(vector<T> *inVArray, int left, int right);
+	void mergeSortReq(vector<T> *inVArray, int left, int right);
 	void merge(vector<T> *inVArray, int left, int mer, int right);
 private:
-	int SortCArray(T **inCArray);
-	void mergeSortRec(T **inCArray, int left, int right);
-	void merge(T **inCArray, int left, int mer, int right);
+	int SortCArray(T * inCArray);
+	void mergeSortReq(T * inCArray, int left, int right);
+	void merge(T * inCArray, int left, int mer, int right);
 private:
 	int SortMArray(Array<T> *inMArray);
-	void mergeSortRec(Array<T> *inMArray, int left, int right);
+	void mergeSortReq(Array<T> *inMArray, int left, int right);
 	void merge(Array<T> *inMArray, int left, int mer, int right);
 };
 
@@ -48,35 +48,35 @@ inline MergeSort<T>::~MergeSort()
 {}
 
 template<typename T>
-inline int MergeSort<T>::SortVArray(vector<T> *inVArray)
+inline int MergeSort<T>::SortVArray(vector<T> * inVArray)
 {
 	int startTime = GetTickCount();
 	int vSize = inVArray->size();
 
-	mergeSortRec(inVArray, 0, (vSize - 1));
+	mergeSortReq(inVArray, 0, (vSize - 1));
 
 	return (GetTickCount() - startTime);
 }
 
 template<typename T>
-inline void MergeSort<T>::mergeSortRec(vector<T> *inVArray, int left, int right)
+inline void MergeSort<T>::mergeSortReq(vector<T> * inVArray, int left, int right)
 {
 	if (left < right) {
-		int mer = left + (right - left) / 2;
+		int mid = (left + right) / 2;
 
-		mergeSortRec(inVArray, left, mer);
-		mergeSortRec(inVArray, mer + 1, right);
+		mergeSortReq(inVArray, left, mid);
+		mergeSortReq(inVArray, mid + 1, right);
 
-		merge(inVArray, left, mer, right);
+		merge(inVArray, left, mid, right);
 	}
 }
 
 template<typename T>
-inline void MergeSort<T>::merge(vector<T> *inVArray, int left, int mer, int right)
+inline void MergeSort<T>::merge(vector<T> * inVArray, int left, int mid, int right)
 {
 	int i, j, k;
-	int n1 = mer - left + 1;
-	int n2 = right - mer;
+	int n1 = mid - left + 1;
+	int n2 = right - mid;
 
 	int* Left = new int[n1];
 	int* Right = new int[n2];
@@ -86,7 +86,7 @@ inline void MergeSort<T>::merge(vector<T> *inVArray, int left, int mer, int righ
 	}
 	
 	for (j = 0; j < n2; j++) {
-		Right[j] = (*inVArray)[mer + 1 + j];
+		Right[j] = (*inVArray)[mid + 1 + j];
 	}
 	
 	i = 0;
@@ -122,45 +122,45 @@ inline void MergeSort<T>::merge(vector<T> *inVArray, int left, int mer, int righ
 }
 
 template<typename T>
-inline int MergeSort<T>::SortCArray(T** inCArray)
+inline int MergeSort<T>::SortCArray(T* inCArray)
 {
 	int startTime = GetTickCount();
 	int cSize = sizeof(inCArray);
 
-	mergeSortRec(inCArray, 0, (cSize - 1));
+	mergeSortReq(inCArray, 0, (cSize - 1));
 
 	return (GetTickCount() - startTime);
 }
 
 template<typename T>
-inline void MergeSort<T>::mergeSortRec(T **inCArray, int left, int right)
+inline void MergeSort<T>::mergeSortReq(T *inCArray, int left, int right)
 {
 	if (left < right) {
-		int mer = left + (right - left) / 2;
+		int mid = (left + right) / 2;
 
-		mergeSortRec(inCArray, left, mer);
-		mergeSortRec(inCArray, mer + 1, right);
+		mergeSortReq(inCArray, left, mid);
+		mergeSortReq(inCArray, mid + 1, right);
 
-		merge(inCArray, left, mer, right);
+		merge(inCArray, left, mid, right);
 	}
 }
 
 template<typename T>
-inline void MergeSort<T>::merge(T **inCArray, int left, int mer, int right)
+inline void MergeSort<T>::merge(T  *inCArray, int left, int mid, int right)
 {
 	int i, j, k;
-	int n1 = mer - left + 1;
-	int n2 = right - mer;
+	int n1 = mid - left + 1;
+	int n2 = right - mid;
 
 	int* Left = new int[n1];
 	int* Right = new int[n2];
 
 	for (i = 0; i < n1; i++) {
-		Left[i] = (*inCArray)[left + i];
+		Left[i] = inCArray[left + i];
 	}
 		
 	for (j = 0; j < n2; j++) {
-		Right[j] = (*inCArray)[mer + 1 + j];
+		Right[j] = inCArray[mid + 1 + j];
 	}
 	
 	i = 0;
@@ -168,24 +168,24 @@ inline void MergeSort<T>::merge(T **inCArray, int left, int mer, int right)
 	k = left;
 	while (i < n1 && j < n2)	{
 		if (Left[i] <= Right[j]) {
-			(*inCArray)[k] = Left[i];
+			inCArray[k] = Left[i];
 			i++;
 		}
 		else {
-			(*inCArray)[k] = Right[j];
+			inCArray[k] = Right[j];
 			j++;
 		}
 		k++;
 	}
 
 	while (i < n1) {
-		(*inCArray)[k] = Left[i];
+		inCArray[k] = Left[i];
 		i++;
 		k++;
 	}
 
 	while (j < n2) {
-		(*inCArray)[k] = Right[j];
+		inCArray[k] = Right[j];
 		j++;
 		k++;
 	}
@@ -200,30 +200,30 @@ inline int MergeSort<T>::SortMArray(Array<T> *inMArray)
 	int startTime = GetTickCount();
 	int mSize = inMArray->getLength();
 
-	mergeSortRec(inMArray, 0, (mSize - 1));
+	mergeSortReq(inMArray, 0, (mSize - 1));
 
 	return (GetTickCount() - startTime);
 }
 
 template<typename T>
-inline void MergeSort<T>::mergeSortRec(Array<T> *inMArray, int left, int right)
+inline void MergeSort<T>::mergeSortReq(Array<T> *inMArray, int left, int right)
 {
 	if (left < right) {
-		int mer = left + (right - left) / 2;
+		int mid = (left + right) / 2;
 
-		mergeSortRec(inMArray, left, mer);
-		mergeSortRec(inMArray, mer + 1, right);
+		mergeSortReq(inMArray, left, mid);
+		mergeSortReq(inMArray, mid + 1, right);
 
-		merge(inMArray, left, mer, right);
+		merge(inMArray, left, mid, right);
 	}
 }
 
 template<typename T>
-inline void MergeSort<T>::merge(Array<T> *inMArray, int left, int mer, int right)
+inline void MergeSort<T>::merge(Array<T> *inMArray, int left, int mid, int right)
 {
 	int i, j, k;
-	int n1 = mer - left + 1;
-	int n2 = right - mer;
+	int n1 = mid - left + 1;
+	int n2 = right - mid;
 
 	int* Left = new int[n1];
 	int* Right = new int[n2];
@@ -233,7 +233,7 @@ inline void MergeSort<T>::merge(Array<T> *inMArray, int left, int mer, int right
 	}
 		
 	for (j = 0; j < n2; j++) {
-		Right[j] = (*inMArray)[mer + 1 + j];
+		Right[j] = (*inMArray)[mid + 1 + j];
 	}
 		
 	i = 0;
