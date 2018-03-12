@@ -17,6 +17,9 @@ class ISort
 public:
 	SortResult Sort();
 	~ISort();
+public:
+	void setAllSize(int inNum) { allSize = inNum; }
+	int getAllSize() { return allSize; }
 
 protected:
 	void revertArrays();
@@ -24,20 +27,19 @@ protected:
 	void displayAllArrays();
 	void displayArrays(vector<T> *inVArray);
 	void displayArrays(T* inCArray);
-	void displayArrays(Array<T> *inMArray);
+	void displayArrays(Array<T> * inMArray);
 	void init(vector<T> *inValues, int inNum, string inName);
 protected:
-	virtual int SortVArray(vector<T> *inVArray) = 0;
+	virtual int SortVArray(vector<T> * inVArray) = 0;
 	virtual int SortCArray(T* inCArray) = 0;
-	virtual int SortMArray(Array<T> *inMArray) = 0;
+	virtual int SortMArray(Array<T> * inMArray) = 0;
 protected:
-	int aSize;
-	string mName = "default";
-protected:
+	int allSize;
 	T * c_Array;
-	vector<T> orig_CopyArray;
 	vector<T> vec_Array;
 	Array<T> my_Array;
+	vector<T> orig_CopyArray;
+	string mName = "default";
 };
 
 template <typename T>
@@ -59,14 +61,14 @@ inline ISort<T>::~ISort()
 {
 	vector<T>().swap(orig_CopyArray);
 	vector<T>().swap(vec_Array);
-	delete c_Array;
+	delete[] c_Array;
 	c_Array = nullptr;
 }
 
 template <typename T>
 inline void ISort<T>::revertArrays()
 {
-	for (int i = 0; i < (aSize - 1); i++) {
+	for (int i = 0; i < allSize; i++) {
 		c_Array[i] = orig_CopyArray[i];
 		vec_Array[i] = orig_CopyArray[i];
 		my_Array[i] = orig_CopyArray[i];
@@ -79,6 +81,7 @@ inline void ISort<T>::init(vector<T>* inValues, int inNum, string inName)
 	c_Array = new T[inNum];
 	my_Array = Array<T>(inNum);
 	mName = inName;
+	setAllSize(inNum);
 
 	for (int i = 0; i < inNum; i++) {
 		orig_CopyArray.push_back((*inValues)[i]);

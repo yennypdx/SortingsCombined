@@ -17,10 +17,13 @@ class InsertSort : public ISort<T>
 public:
 	InsertSort(vector<T> *inValues, int inNum);
 	~InsertSort();
+public:
+	void setArrSize(int inNum) { arrSize = inNum; }
 
 private:
-	int SortVArray(vector<T> *inVArray);
+	int arrSize;
 	int SortCArray(T *inCArray);
+	int SortVArray(vector<T> *inVArray);
 	int SortMArray(Array<T> *inMArray);
 };
 
@@ -29,6 +32,7 @@ inline InsertSort<T>::InsertSort(vector<T> *inValues, int inSize)
 {
 	if (inSize > 0) {
 		ISort<T>::init(inValues, inSize, "INSERTSORT");
+		setArrSize(inSize);
 	}
 	else {
 		runtime_error("Exception caught: Size must be greater than 0.");
@@ -40,31 +44,12 @@ inline InsertSort<T>::~InsertSort()
 {}
 
 template<typename T>
-inline int InsertSort<T>::SortVArray(vector<T>* inVArray)
-{
-	int startTime = GetTickCount();
-	int vSize = inVArray->size();
-	T key;
-
-	for (int i = 1; i < vSize; i++)	{
-		key = (*inVArray)[i];
-		int j;
-		for (j = i - 1; j >= 0 && (*inVArray)[j] > key; j--) {
-			(*inVArray)[j + 1] = (*inVArray)[j];
-		}
-		(*inVArray)[j + 1] = key;
-	}
-	return (GetTickCount() - startTime);
-}
-
-template<typename T>
 inline int InsertSort<T>::SortCArray(T* inCArray)
 {
 	int startTime = GetTickCount();
-	int cSize = sizeof(inCArray);
 	T key;
 
-	for (int i = 1; i < cSize; i++) {
+	for (int i = 1; i < arrSize; i++) {
 		key = inCArray[i];
 		int j;
 		for (j = i - 1; j >= 0 && inCArray[j] > key; j--) {
@@ -76,13 +61,29 @@ inline int InsertSort<T>::SortCArray(T* inCArray)
 }
 
 template<typename T>
+inline int InsertSort<T>::SortVArray(vector<T>* inVArray)
+{
+	int startTime = GetTickCount();
+	T key;
+
+	for (int i = 1; i < arrSize; i++)	{
+		key = (*inVArray)[i];
+		int j;
+		for (j = i - 1; j >= 0 && (*inVArray)[j] > key; j--) {
+			(*inVArray)[j + 1] = (*inVArray)[j];
+		}
+		(*inVArray)[j + 1] = key;
+	}
+	return (GetTickCount() - startTime);
+}
+
+template<typename T>
 inline int InsertSort<T>::SortMArray(Array<T>* inMArray)
 {
 	int startTime = GetTickCount();
-	int mSize = inMArray->getLength();
 	T key;
 
-	for (int i = 1; i < mSize; i++) {
+	for (int i = 1; i < arrSize; i++) {
 		key = (*inMArray)[i];
 		int j;
 		for (j = i - 1; j >= 0 && (*inMArray)[j] > key; j--) {

@@ -17,7 +17,11 @@ class MergeSort : public ISort<T>
 public:
 	MergeSort(vector<T> *inValues, int inNum);
 	~MergeSort();
+public:
+	void setArrSize(int inNum) { arrSize = inNum; }
 
+private:
+	int arrSize;
 private:
 	int SortVArray(vector<T> *inVArray);
 	void mergeSortReq(vector<T> *inVArray, int left, int right);
@@ -37,6 +41,7 @@ inline MergeSort<T>::MergeSort(vector<T> *inValues, int inSize)
 {
 	if (inSize > 0) {
 		ISort<T>::init(inValues, inSize, "MERGESORT");
+		setArrSize(inSize);
 	}
 	else {
 		runtime_error("Exception caught: Size must be greater than 0.");
@@ -51,9 +56,8 @@ template<typename T>
 inline int MergeSort<T>::SortVArray(vector<T> * inVArray)
 {
 	int startTime = GetTickCount();
-	int vSize = inVArray->size();
 
-	mergeSortReq(inVArray, 0, (vSize - 1));
+	mergeSortReq(inVArray, 0, (arrSize - 1));
 
 	return (GetTickCount() - startTime);
 }
@@ -125,9 +129,8 @@ template<typename T>
 inline int MergeSort<T>::SortCArray(T* inCArray)
 {
 	int startTime = GetTickCount();
-	int cSize = sizeof(inCArray);
 
-	mergeSortReq(inCArray, 0, (cSize - 1));
+	mergeSortReq(inCArray, 0, (arrSize - 1));
 
 	return (GetTickCount() - startTime);
 }
@@ -198,9 +201,8 @@ template<typename T>
 inline int MergeSort<T>::SortMArray(Array<T> *inMArray)
 {
 	int startTime = GetTickCount();
-	int mSize = inMArray->getLength();
 
-	mergeSortReq(inMArray, 0, (mSize - 1));
+	mergeSortReq(inMArray, 0, (arrSize - 1));
 
 	return (GetTickCount() - startTime);
 }

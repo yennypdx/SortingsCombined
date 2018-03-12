@@ -17,10 +17,13 @@ class FlaggedSort : public ISort<T>
 public:
 	FlaggedSort(vector<T> *inValues, int inNum);
 	~FlaggedSort();
+public:
+	void setArrSize(int inNum) { arrSize = inNum; }
 
 private:
-	int SortVArray(vector<T> *inVArray);
+	int arrSize;
 	int SortCArray(T* inCArray);
+	int SortVArray(vector<T> *inVArray);
 	int SortMArray(Array<T> *inMArray);
 };
 
@@ -29,6 +32,7 @@ inline FlaggedSort<T>::FlaggedSort(vector<T> *inValues, int inSize)
 {
 	if (inSize > 0) {
 		ISort<T>::init(inValues, inSize, "FLAGGEDSORT");
+		setArrSize(inSize);
 	}
 	else {
 		runtime_error("Exception caught: Size must be greater than 0.");
@@ -40,37 +44,13 @@ inline FlaggedSort<T>::~FlaggedSort()
 {}
 
 template<typename T>
-inline int FlaggedSort<T>::SortVArray(vector<T> *inVArray)
-{
-	int startTime = GetTickCount();
-	int vSize = inVArray->size();
-
-	for (int i = 1; i < vSize; i++) {
-		bool isSorted = true;
-		for (int j = 0; j < (vSize - 1); j++) {
-			if ((*inVArray)[j] >(*inVArray)[j + 1]) {
-				T temp = (*inVArray)[j];
-				(*inVArray)[j] = (*inVArray)[j + 1];
-				(*inVArray)[j + 1] = temp;
-				isSorted = false;
-			}
-		}
-		if (isSorted) {
-			continue;
-		}
-	}
-	return (GetTickCount() - startTime);
-}
-
-template<typename T>
 inline int FlaggedSort<T>::SortCArray(T* inCArray)
 {
 	int startTime = GetTickCount();
-	int cSize = sizeof(inCArray);
 
-	for (int i = 1; i < cSize; i++) {
+	for (int i = 1; i < arrSize; i++) {
 		bool isSorted = true;
-		for (int j = 0; j < ((cSize - 1) - i); j++) {
+		for (int j = 0; j < ((arrSize - 1) - i); j++) {
 			if (inCArray[j] > inCArray[j + 1]) {
 				T temp = inCArray[j];
 				inCArray[j] = inCArray[j + 1];
@@ -87,14 +67,35 @@ inline int FlaggedSort<T>::SortCArray(T* inCArray)
 }
 
 template<typename T>
+inline int FlaggedSort<T>::SortVArray(vector<T> *inVArray)
+{
+	int startTime = GetTickCount();
+
+	for (int i = 1; i < arrSize; i++) {
+		bool isSorted = true;
+		for (int j = 0; j < (arrSize - 1); j++) {
+			if ((*inVArray)[j] >(*inVArray)[j + 1]) {
+				T temp = (*inVArray)[j];
+				(*inVArray)[j] = (*inVArray)[j + 1];
+				(*inVArray)[j + 1] = temp;
+				isSorted = false;
+			}
+		}
+		if (isSorted) {
+			continue;
+		}
+	}
+	return (GetTickCount() - startTime);
+}
+
+template<typename T>
 inline int FlaggedSort<T>::SortMArray(Array<T> *inMArray)
 {
 	int startTime = GetTickCount();
-	int mSize = inMArray->getLength();
 
-	for (int i = 1; i < (mSize - 1); i++) {
+	for (int i = 1; i < (arrSize - 1); i++) {
 		bool isSorted = true;
-		for (int j = 0; j < ((mSize - 1) - i); j++) {
+		for (int j = 0; j < ((arrSize - 1) - i); j++) {
 			if ((*inMArray)[j] >(*inMArray)[j + 1]) {
 				T temp = (*inMArray)[j];
 				(*inMArray)[j] = (*inMArray)[j + 1];
